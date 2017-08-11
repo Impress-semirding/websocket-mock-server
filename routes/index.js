@@ -25,7 +25,16 @@ router.get('/', function(req, res, next) {
     }
   })
 
-  res.render('index', { title: 'Express' });
+  res.render('indexs', { title: 'Express' });
 });
+
+router.post('/send', function(req, res, next) {
+  const reqData = req.body.data;
+  const keyStr = reqData.request.replace(/\s+/g,"");
+  const key = JSON.stringify(keyStr);
+  const value = reqData.response;
+  console.log(key);
+  console.log(value);
+})
 
 module.exports = router;
