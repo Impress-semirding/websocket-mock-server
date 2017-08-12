@@ -20,8 +20,9 @@
   function save(params) {
     var formData = document.getElementById('form');
     var data = {
-      request: formData[0].value,
-      response: formData[1].value
+      collection: formData[0].value,
+      request: formData[1].value,
+      response: formData[2].value
     }
     $.ajax({
       type: 'POST',
@@ -74,6 +75,7 @@
     </div>
     <div class="input-group">
       <form onsubmit="save();" id="form">
+          <input type="none" value="myCollection">
           <textarea type="text" rows="4"></textarea>
           </br>
           <textarea type="text" rows="4"></textarea>

@@ -5,31 +5,35 @@ const fs = require('fs');
 const _ = require('lodash');
 const Promise = require("bluebird");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  const currentPath = path.join(__dirname, '../data/1.json');
-  let linkBuffer = {};
-  fs.exists(currentPath, function(exists) {
-    if (exists) {
-      const result = JSON.parse(fs.readFileSync(currentPath));
-      const newData = _.assign({}, result, {
-        url: {a: "a", b: "b"}
-      })
-      fs.writeFile( currentPath, JSON.stringify(newData, null, 2 ), 'utf8', function() {
-        console.log(11);
-      });
-    } else {
-      fs.writeFile( currentPath, JSON.stringify( {a: "a", b: "b"}, null, 2 ), 'utf8', function() {
-        console.log(11);
-      });
-    }
-  })
+const file = require('../libs/fs');
 
+
+async function index(filePath) {
+  const exists = await file.exists(filePath);
+
+  if (exists) {
+    let result = await file.readJsonFile(filePath);
+    const newData = _.assign({}, result, {
+      ...result,
+      url: {}
+    }) 
+    await file.writeJsonFile(filePath, JSON.stringify(newData, null, 2 ));
+    return;
+  }
+  await file.writeJsonFile( filePath, JSON.stringify( {a: "a", b: "b"}));
+}
+
+/* GET home page. */
+router.get('/', async function(req, res, next) {
+  const filePath = path.join(__dirname, '../data/1.json');
+  // const isExists = await index(filePath);
+  await index(filePath);
   res.render('indexs', { title: 'Express' });
 });
 
 router.post('/send', function(req, res, next) {
   const reqData = req.body.data;
+  const collectionName = reqData.collection;
   const keyStr = reqData.request.replace(/\s+/g,"");
   const key = JSON.stringify(keyStr);
   const value = reqData.response;
