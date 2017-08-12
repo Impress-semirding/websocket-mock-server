@@ -51,8 +51,11 @@ function writeJsonFile(path, data) {
 function exists(path) {
   return new Promise((resolve, reject) => {
     console.log(path);
-    fs.exists(path, (exists) => {
+    fs.exists(path, (exists, err) => {
       resolve(exists)
+      if (err) {
+        reject();
+      }
     })
   });
 }
