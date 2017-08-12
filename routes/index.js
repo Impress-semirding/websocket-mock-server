@@ -13,6 +13,7 @@ async function index(filePath) {
 
   if (exists) {
     let result = await file.readJsonFile(filePath);
+    result = JSON.parse(result);
     const newData = _.assign({}, result, {
       ...result,
       url: {}
@@ -20,7 +21,7 @@ async function index(filePath) {
     await file.writeJsonFile(filePath, JSON.stringify(newData, null, 2 ));
     return;
   }
-  await file.writeJsonFile( filePath, JSON.stringify( {a: "a", b: "b"}));
+  await file.writeJsonFile( filePath, JSON.stringify( {a: "a", b: "b"}, null, 2));
 }
 
 /* GET home page. */
